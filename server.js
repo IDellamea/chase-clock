@@ -11,27 +11,9 @@ app.use(express.json());
 // Endpoint para obtener la hora actual del servidor
 app.get('/api/current-time', (req, res) => {
     try {
-        const now = new Date();
-        
-        // Configurar para Argentina (GMT-3)
-        const argentinaTime = new Date(now.toLocaleString("en-US", {
-            timeZone: "America/Argentina/Buenos_Aires"
-        }));
-
+        // Envía directamente el timestamp UTC del servidor, que es independiente de la zona horaria.
         res.json({
-            timestamp: argentinaTime.getTime(),
-            iso: argentinaTime.toISOString(),
-            local: argentinaTime.toLocaleString('es-AR', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: false
-            }),
-            timezone: 'America/Argentina/Buenos_Aires',
-            offset: -3
+            timestamp: Date.now()
         });
     } catch (error) {
         res.status(500).json({ error: 'Error al obtener la hora actual' });

@@ -62,7 +62,7 @@ class DVRTimeCalculator {
     }
 
     updateCurrentTime() {
-        const now = new Date();
+        const now = this.getSyncedTime();
         const argentinaTime = new Intl.DateTimeFormat('es-AR', {
             timeZone: ARGENTINA_TIMEZONE,
             year: 'numeric',
@@ -79,20 +79,13 @@ class DVRTimeCalculator {
         this.updateCalculations();
     }
 
-    getCurrentArgentinaTime() {
-        let now;
-        
+    getSyncedTime() {
         if (this.currentServerTime) {
-            // Usar tiempo del servidor ajustado
-            now = new Date(Date.now() - this.serverTimeOffset);
-        } else {
-            // Fallback a tiempo local del navegador
-            now = new Date();
+            // Usar tiempo del servidor ajustado para mayor precisión
+            return new Date(Date.now() - this.serverTimeOffset);
         }
-        
-        // Convertir a hora de Argentina (GMT-3)
-        const argentinaTime = new Date(now.toLocaleString("en-US", {timeZone: ARGENTINA_TIMEZONE}));
-        return argentinaTime;
+        // Fallback a tiempo local del navegador si la sincronización falló
+        return new Date();
     }
 
     calculateTimeDifference(date1, date2) {
@@ -150,8 +143,9 @@ class DVRTimeCalculator {
             return;
         }
 
-        const dvrTime = new Date(dvrDateTimeValue);
-        const currentTime = this.getCurrentArgentinaTime();
+        // Interpretar la hora del DVR como hora de Argentina (GMT-3)
+        const dvrTime = new Date(`${dvrDateTimeValue}:00-03:00`);
+        const currentTime = this.getSyncedTime(); // Usar la hora UTC sincronizada
         const diff = this.calculateTimeDifference(dvrTime, currentTime);
 
         // Actualizar el texto de diferencia
@@ -190,9 +184,10 @@ class DVRTimeCalculator {
             return;
         }
 
-        const eventTime = new Date(eventDateTimeValue);
-        const dvrTime = new Date(dvrDateTimeValue);
-        const currentTime = this.getCurrentArgentinaTime();
+        // Interpretar las fechas como hora de Argentina (GMT-3)
+        const eventTime = new Date(`${eventDateTimeValue}:00-03:00`);
+        const dvrTime = new Date(`${dvrDateTimeValue}:00-03:00`);
+        const currentTime = this.getSyncedTime(); // Usar la hora UTC sincronizada
 
         // Calcular el desfasaje del DVR
         const dvrOffset = dvrTime.getTime() - currentTime.getTime();
