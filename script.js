@@ -89,43 +89,67 @@ class DVRTimeCalculator {
     }
 
     calculateTimeDifference(date1, date2) {
-        const diffMs = Math.abs(date2.getTime() - date1.getTime());
-        const diffSeconds = Math.floor(diffMs / 1000);
-        const diffMinutes = Math.floor(diffSeconds / 60);
-        const diffHours = Math.floor(diffMinutes / 60);
+        const isAhead = date1.getTime() > date2.getTime();
+        const startDate = isAhead ? date2 : date1;
+        const endDate = isAhead ? date1 : date2;
 
-        const hours = diffHours;
-        const minutes = diffMinutes % 60;
-        const seconds = diffSeconds % 60;
+        const diffMs = endDate.getTime() - startDate.getTime();
+
+        if (diffMs === 0) {
+            return { totalMs: 0, years: 0, days: 0, hours: 0, minutes: 0, seconds: 0, isAhead };
+        }
+
+        let tempStartDate = new Date(startDate);
+        let years = endDate.getUTCFullYear() - startDate.getUTCFullYear();
+        tempStartDate.setUTCFullYear(startDate.getUTCFullYear() + years);
+
+        if (tempStartDate > endDate) {
+            years--;
+            tempStartDate.setUTCFullYear(startDate.getUTCFullYear() + years);
+        }
+
+        const remainingMs = endDate.getTime() - tempStartDate.getTime();
+        
+        const days = Math.floor(remainingMs / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((remainingMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((remainingMs % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((remainingMs % (1000 * 60)) / 1000);
 
         return {
             totalMs: diffMs,
+            years,
+            days,
             hours,
             minutes,
             seconds,
-            isAhead: date1.getTime() > date2.getTime()
+            isAhead
         };
     }
 
     formatTimeDifference(diff) {
-        if (diff.hours >= 24) {
-            const days = Math.floor(diff.hours / 24);
-            const remainingHours = diff.hours % 24;
-            
-            let result = days === 1 ? '1 día' : `${days} días`;
-            
-            if (remainingHours > 0) {
-                result += ` ${remainingHours}h`;
-            }
-            
-            if (diff.minutes > 0) {
-                result += ` ${diff.minutes}m`;
-            }
-            
-            return result;
-        } else {
-            return `${diff.hours}h ${diff.minutes}m`;
+        if (diff.totalMs < 1000) {
+            return '0m';
         }
+
+        const parts = [];
+        if (diff.years > 0) {
+            parts.push(`${diff.years} ${diff.years === 1 ? 'año' : 'años'}`);
+        }
+        if (diff.days > 0) {
+            parts.push(`${diff.days} ${diff.days === 1 ? 'día' : 'días'}`);
+        }
+        if (diff.hours > 0) {
+            parts.push(`${diff.hours}h`);
+        }
+        if (diff.minutes > 0) {
+            parts.push(`${diff.minutes}m`);
+        }
+
+        if (parts.length > 0) {
+            return parts.join(' ');
+        }
+
+        return '< 1m';
     }
 
     updateCalculations() {
