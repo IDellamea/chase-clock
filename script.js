@@ -132,24 +132,26 @@ class DVRTimeCalculator {
         }
 
         const parts = [];
+
         if (diff.years > 0) {
             parts.push(`${diff.years} ${diff.years === 1 ? 'año' : 'años'}`);
-        }
-        if (diff.days > 0) {
             parts.push(`${diff.days} ${diff.days === 1 ? 'día' : 'días'}`);
-        }
-        if (diff.hours > 0) {
             parts.push(`${diff.hours}h`);
-        }
-        if (diff.minutes > 0) {
             parts.push(`${diff.minutes}m`);
+        } else if (diff.days > 0) {
+            parts.push(`${diff.days} ${diff.days === 1 ? 'día' : 'días'}`);
+            parts.push(`${diff.hours}h`);
+            parts.push(`${diff.minutes}m`);
+        } else if (diff.hours > 0) {
+            parts.push(`${diff.hours}h`);
+            parts.push(`${diff.minutes}m`);
+        } else if (diff.minutes > 0) {
+            parts.push(`${diff.minutes}m`);
+        } else {
+            return '< 1m';
         }
-
-        if (parts.length > 0) {
-            return parts.join(' ');
-        }
-
-        return '< 1m';
+        
+        return parts.join(' ');
     }
 
     updateCalculations() {
