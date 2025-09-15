@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hora de DVR - Calculadora de Desfasaje</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📹 Hora de DVR</h1>
+            <p>Calculadora de Desfasaje Horario</p>
+        </header>
+
+        <main>
+            <div class="card">
+                <h2>⚙️ Configuración del DVR</h2>
+                
+                <div class="input-group">
+                    <label for="dvr-datetime">FECHA Y HORA DVR:</label>
+                    <input type="datetime-local" id="dvr-datetime" required>
+                </div>
+
+                <div class="info-group">
+                    <label>FECHA Y HORA ACTUAL (GMT-3 Argentina):</label>
+                    <div class="current-time" id="current-time"></div>
+                </div>
+
+                <div class="result-group">
+                    <label>DESFASAJE:</label>
+                    <div class="desfasaje" id="desfasaje">
+                        <span class="status" id="status">-</span>
+                        <span class="time" id="time-diff">0h 0m 0s</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="card">
+                <h2>🕒 Cálculo del Hecho</h2>
+                
+                <div class="input-group">
+                    <label for="event-datetime">FECHA Y HORA DEL HECHO:</label>
+                    <input type="datetime-local" id="event-datetime" required>
+                </div>
+
+                <div class="result-group">
+                    <label>BUSCAR EN ESTA HORA EN EL DVR:</label>
+                    <div class="dvr-search-time" id="dvr-search-time">
+                        Selecciona la hora del hecho
+                    </div>
+                </div>
+            </div>
+
+            <div class="instructions">
+                <h3>📋 Instrucciones:</h3>
+                <ol>
+                    <li>Ingresa la fecha y hora que muestra el DVR</li>
+                    <li>El sistema calculará automáticamente el desfasaje</li>
+                    <li>Ingresa la fecha y hora real del hecho que buscas</li>
+                    <li>El sistema te mostrará qué hora buscar en el DVR</li>
+                </ol>
+            </div>
+        </main>
+        
+        <footer>
+            <div class="footer-content">
+                <p>Desarrollado por <strong>Dellamea I.</strong></p>
+                <p>Colaboración <strong>Ovejero N.</strong></p>
+                <p class="year">© 2025</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
