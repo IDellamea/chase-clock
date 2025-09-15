@@ -1,13 +1,13 @@
 {
-  "name": "dvr-hora-calculator",
+  "name": "chase-clock",
   "version": "1.0.0",
-  "description": "Calculadora de desfasaje horario para DVR",
+  "description": "Chase Clock - Calculadora de desfasaje horario para DVR",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js"
   },
-  "keywords": ["dvr", "time", "calculator", "desfasaje"],
+  "keywords": ["chase", "clock", "dvr", "time", "calculator", "desfasaje", "paw-patrol"],
   "author": "",
   "license": "MIT",
   "dependencies": {
